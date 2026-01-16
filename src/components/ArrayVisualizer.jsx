@@ -35,41 +35,51 @@ export default function ArrayVisualizer() {
     setIsPlaying(false);
   };
 
-  return (
-    
-      
-        {array.map((value, index) => (
-          <AnimatedBox
-            key={index}
-            value={value}
-            index={index}
-            isActive={currentIndex === index}
-          />
-        ))}
-      
+return (
+  <div style={{ padding: '2rem' }}>
+    {/* Array boxes */}
+    <div
+      style={{
+        display: 'flex',
+        gap: '1rem',
+        marginBottom: '1.5rem'
+      }}
+    >
+      {array.map((value, index) => (
+        <AnimatedBox
+          key={index}
+          value={value}
+          index={index}
+          isActive={currentIndex === index}
+        />
+      ))}
+    </div>
 
-      
-        {currentIndex >= 0 && (
-          
-            Current Index: {currentIndex} | Value: {array[currentIndex]}
-          
-        )}
-      
+    {/* Current pointer info */}
+    {currentIndex >= 0 && (
+      <div style={{ marginBottom: '1rem', fontWeight: 'bold' }}>
+        Current Index: {currentIndex} | Value: {array[currentIndex]}
+      </div>
+    )}
 
-      
-        
-          ← Previous
-        
-        
-          {isPlaying ? 'Playing...' : '▶ Auto Play'}
-        
-        
-          Next →
-        
-        
-          ↺ Reset
-        
-      
-    
-  );
+    {/* Controls */}
+    <div style={{ display: 'flex', gap: '1rem' }}>
+      <button onClick={prev} disabled={currentIndex <= 0}>
+        ← Previous
+      </button>
+
+      <button onClick={traverse} disabled={isPlaying}>
+        {isPlaying ? 'Playing...' : '▶ Auto Play'}
+      </button>
+
+      <button onClick={next} disabled={currentIndex >= array.length - 1}>
+        Next →
+      </button>
+
+      <button onClick={reset}>
+        ↺ Reset
+      </button>
+    </div>
+  </div>
+);
 }

@@ -63,4 +63,4 @@ Let's visualize it below...`
     locked: true,
   }
 ];
-```
+

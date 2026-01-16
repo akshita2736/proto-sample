@@ -23,17 +23,21 @@ export default function QuizInterface({ quiz, topic }) {
 
     setLoading(true);
     try {
-      const evaluation = await evaluateQuizAnswer(topic, question.question, answer);
+      const evaluation = await evaluateQuizAnswer(
+        topic,
+        question.question,
+        answer
+      );
       setResult(evaluation);
 
       if (evaluation.score >= 60) {
         const progress = getProgress();
         progress.xp += 30;
-        
+
         if (progress.xp >= progress.level * 100) {
           progress.level += 1;
         }
-        
+
         saveProgress(progress);
       }
     } catch (error) {
@@ -53,70 +57,102 @@ export default function QuizInterface({ quiz, topic }) {
   };
 
   return (
-    
-      
-        
-          Quiz Time! 📝
-          
-            Question {currentQ + 1} of {quiz.questions.length}
-          
-        
-        
-          <div
-            className="bg-indigo-500 h-2 rounded-full transition-all"
-            style={{ width: `${((currentQ + 1) / quiz.questions.length) * 100}%` }}
-          />
-        
-      
+    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '1.5rem' }}>
+        <h2>Quiz Time! 📝</h2>
+        <p>
+          Question {currentQ + 1} of {quiz.questions.length}
+        </p>
 
-      
-        {question.question}
+        <div
+          style={{
+            height: '8px',
+            borderRadius: '999px',
+            background: '#e5e7eb',
+            marginTop: '0.5rem'
+          }}
+        >
+          <div
+            style={{
+              height: '100%',
+              width: `${((currentQ + 1) / quiz.questions.length) * 100}%`,
+              background: '#6366f1',
+              borderRadius: '999px',
+              transition: 'width 0.3s ease'
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Question */}
+      <div style={{ marginBottom: '1.5rem' }}>
+        <p style={{ fontWeight: 'bold' }}>{question.question}</p>
         <textarea
           value={answers[currentQ] || ''}
-          onChange={(e) => setAnswers({ ...answers, [currentQ]: e.target.value })}
+          onChange={(e) =>
+            setAnswers({ ...answers, [currentQ]: e.target.value })
+          }
           placeholder="Write your answer in plain English..."
-          className="w-full border-2 border-indigo-300 rounded-lg p-4 h-32 resize-none"
+          style={{
+            width: '100%',
+            minHeight: '120px',
+            padding: '1rem',
+            marginTop: '0.5rem',
+            borderRadius: '8px',
+            border: '2px solid #c7d2fe'
+          }}
           disabled={result !== null}
         />
-      
+      </div>
 
-      {result ? (
-        = 60 ? 'bg-green-100 border-2 border-green-400' : 'bg-yellow-100 border-2 border-yellow-400'
-          }`}
+      {/* Result */}
+      {result && (
+        <div
+          style={{
+            padding: '1rem',
+            marginBottom: '1.5rem',
+            borderRadius: '8px',
+            border:
+              result.score >= 60
+                ? '2px solid #22c55e'
+                : '2px solid #f59e0b',
+            background:
+              result.score >= 60 ? '#dcfce7' : '#fef3c7'
+          }}
         >
-          
-            
-              {result.score >= 60 ? '🎉 Great job!' : '📚 Keep learning!'}
-            
-            {result.score}/100
-          
-          {result.feedback}
-          
-            Tip: {result.tip}
-          
+          <h3>
+            {result.score >= 60 ? '🎉 Great job!' : '📚 Keep learning!'}
+          </h3>
+          <p>Score: {result.score}/100</p>
+          <p>{result.feedback}</p>
+          <p>
+            <strong>Tip:</strong> {result.tip}
+          </p>
           {result.score >= 60 && (
-            +30 XP earned!
+            <p style={{ fontWeight: 'bold' }}>+30 XP earned!</p>
           )}
-        
-      ) : null}
+        </div>
+      )}
 
-      
-        <button
-          onClick={() => router.push('/dashboard')}
-          className="btn-secondary"
-        >
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: '1rem' }}>
+        <button onClick={() => router.push('/dashboard')}>
           Exit Quiz
-        
+        </button>
+
         {result ? (
-          
-            {currentQ < quiz.questions.length - 1 ? 'Next Question' : 'Finish'}
-          
+          <button onClick={handleNext}>
+            {currentQ < quiz.questions.length - 1
+              ? 'Next Question'
+              : 'Finish'}
+          </button>
         ) : (
-          
+          <button onClick={handleSubmit} disabled={loading}>
             {loading ? 'Evaluating...' : 'Submit Answer'}
-          
+          </button>
         )}
-      
-    
+      </div>
+    </div>
   );
 }

@@ -1,20 +1,41 @@
-import './globals.css'
-import Navbar from '@/components/Navbar'
+// import './globals.css'
+// import Navbar from '@/components/Navbar'
+
+// export const metadata = {
+//   title: 'DSA Learning Platform',
+//   description: 'Learn Data Structures visually and have fun!',
+// }
+
+// export default function RootLayout({ children }) {
+//   return (
+    
+      
+        
+        
+//           {children}
+        
+      
+    
+//   )
+// }
+
+
+import './globals.css';
+import Navbar from '../components/Navbar';
+
 
 export const metadata = {
   title: 'DSA Learning Platform',
   description: 'Learn Data Structures visually and have fun!',
-}
+};
 
 export default function RootLayout({ children }) {
   return (
-    
-      
-        
-        
-          {children}
-        
-      
-    
-  )
+    <html lang="en">
+      <body>
+        <Navbar />
+        {children}
+      </body>
+    </html>
+  );
 }
